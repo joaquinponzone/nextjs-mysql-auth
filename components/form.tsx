@@ -7,57 +7,59 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function Form({ type }: { type: "login" | "register" }) {
+export default function Form({ type }: { type: "login" | "register"; }) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    setLoading(true);
+    if (type === "login") {
+      signIn("credentials", {
+        redirect: false,
+        // username: e.currentTarget.username.value,
+        email: e.currentTarget.email.value,
+        password: e.currentTarget.password.value,
+        // @ts-ignore
+      }).then(({ ok, error }) => {
+        setLoading(false);
+        if (ok) {
+          router.push("/protected");
+        } else {
+          toast.error(error);
+        }
+      });
+    } else {
+      fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          // username: e.currentTarget.username.value,
+          email: e.currentTarget.email.value,
+          password: e.currentTarget.password.value,
+        }),
+      }).then(async (res) => {
+        setLoading(false);
+        if (res.status === 200) {
+          toast.success("Account created! Redirecting to login...");
+          setTimeout(() => {
+            router.push("/login");
+          }, 2000);
+        } else {
+          toast.error(await res.text());
+        }
+      });
+    }
+  };
+
   return (
     <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        setLoading(true);
-        if (type === "login") {
-          signIn("credentials", {
-            redirect: false,
-            username: e.currentTarget.username.value,
-            email: e.currentTarget.email.value,
-            password: e.currentTarget.password.value,
-            // @ts-ignore
-          }).then(({ ok, error }) => {
-            setLoading(false);
-            if (ok) {
-              router.push("/protected");
-            } else {
-              toast.error(error);
-            }
-          });
-        } else {
-          fetch("/api/auth/register", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              username: e.currentTarget.username.value,
-              email: e.currentTarget.email.value,
-              password: e.currentTarget.password.value,
-            }),
-          }).then(async (res) => {
-            setLoading(false);
-            if (res.status === 200) {
-              toast.success("Account created! Redirecting to login...");
-              setTimeout(() => {
-                router.push("/login");
-              }, 2000);
-            } else {
-              toast.error(await res.text());
-            }
-          });
-        }
-      }}
-      className="flex flex-col space-y-4 bg-gray-50 px-4 py-8 sm:px-16"
+      onSubmit={handleSubmit}
+      className="flex flex-col space-y-4 bg-gray-50 sm:px-16 px-4 py-8 max-w-screen"
     >
-      <div>
+      {/* <div>
         <label
           htmlFor="email"
           className="block text-xs text-gray-600 uppercase"
@@ -73,7 +75,7 @@ export default function Form({ type }: { type: "login" | "register" }) {
           required
           className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
         />
-      </div>
+      </div> */}
       <div>
         <label
           htmlFor="email"
@@ -108,11 +110,10 @@ export default function Form({ type }: { type: "login" | "register" }) {
       </div>
       <button
         disabled={loading}
-        className={`${
-          loading
-            ? "cursor-not-allowed border-gray-200 bg-gray-100"
-            : "border-black bg-black text-white hover:bg-white hover:text-black"
-        } flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none`}
+        className={`${loading
+          ? "cursor-not-allowed border-gray-200 bg-gray-100"
+          : "border-black bg-black text-white hover:bg-white hover:text-black"
+          } flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none`}
       >
         {loading ? (
           <LoadingDots color="#808080" />

@@ -1,5 +1,5 @@
 import BarChart from '@/components/BarChart';
-import Header from '@/components/Header';
+import Header from '@/components/BreadCrums';
 import RecentOrders from '@/components/RecentOrders';
 import TopCards from '@/components/TopCards';
 import Head from 'next/head';

@@ -13,7 +13,7 @@ interface IProducts {
 
 export default function ProductsList({ products }: { products: IProducts[]; }) {
   return (
-    <div className='w-full col-span-1 relative lg:h-[70vh] h-[50vh] m-auto p-4 rounded-lg bg-white overflow-scroll'>
+    <div className='w-full col-span-1 relative m-auto p-4 rounded-lg bg-white overflow-scroll'>
       <ul>
         {products?.map((product) => (
           <li

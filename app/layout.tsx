@@ -2,7 +2,7 @@
 import "@/styles/globals.css";
 import { Inter } from "@next/font/google";
 import Toaster from "@/components/toaster";
-import Sidebar from "@/components/Sidebar";
+import Navigation from "@/components/Navigation";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -17,9 +17,9 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.variable}>
         <Toaster />
-        <Sidebar >
+        <Navigation >
           {children}
-        </Sidebar>
+        </Navigation>
       </body>
     </html>
   );

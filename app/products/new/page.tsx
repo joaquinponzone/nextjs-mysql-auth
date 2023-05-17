@@ -1,8 +1,8 @@
 import BarChart from '@/components/BarChart';
-import Header from '@/components/Header';
+import Header from '@/components/BreadCrums';
 import RecentOrders from '@/components/RecentOrders';
 import Head from 'next/head';
-import TopActions from '../TopActions';
+import TopActions from '../ProductTopActions';
 
 export default function NewProduct() {
     return (
